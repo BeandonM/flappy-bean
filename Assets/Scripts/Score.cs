@@ -44,4 +44,9 @@ public class Score : MonoBehaviour
         currentScoreText.text = score.ToString();
         updateHighScore();
     }
+
+    public int getScore()
+    {
+        return score;
+    }
 }
