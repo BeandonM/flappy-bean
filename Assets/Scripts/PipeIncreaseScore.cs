@@ -8,7 +8,8 @@ public class PipeIncreaseScore : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            Score.instance.updateScore();
+            ScoreManager.instance.setScore(ScoreManager.instance.getScore() + 1);
+            //Score.instance.updateScore();
         }
     }
 }

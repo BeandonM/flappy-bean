@@ -7,14 +7,21 @@ using UnityEngine.UI;
 
 public class HighScoreManager : MonoBehaviour
 {
+    public static HighScoreManager instance;
     private string userInput;
     [SerializeField] private TextMeshProUGUI scoreText;
-
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
     private void Start()
     {
-        if(Score.instance != null)
+        if(ScoreManager.instance != null)
         {
-            scoreText.text = Score.instance.getScore().ToString();
+            scoreText.text = "Score: " + ScoreManager.instance.getScore().ToString();
         }
 
     }
@@ -24,8 +31,9 @@ public class HighScoreManager : MonoBehaviour
         userInput = s;
     }
 
-    public void submitScore()
-    {
 
+    public string getName()
+    {
+        return userInput;
     }
 }

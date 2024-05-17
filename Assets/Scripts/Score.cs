@@ -11,7 +11,7 @@ public class Score : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currentScoreText;
     [SerializeField] private TextMeshProUGUI highScoreText;
 
-    private int score;
+    //private int score;
 
     private void Awake()
     {
@@ -23,14 +23,16 @@ public class Score : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        currentScoreText.text = score.ToString();
+        //DontDestroyOnLoad(gameObject);
+        currentScoreText.text = ScoreManager.instance.getScore().ToString();///score.ToString();
 
         highScoreText.text = PlayerPrefs.GetInt("Highscore", 0).ToString();
 
     }
 
-    private void updateHighScore()
+    public void updateHighScore()
     {
+        int score = ScoreManager.instance.getScore();
         if (score > PlayerPrefs.GetInt("Highscore"))
         {
             PlayerPrefs.SetInt("Highscore", score);
@@ -40,13 +42,8 @@ public class Score : MonoBehaviour
 
     public void updateScore()
     {
-        score++;
+        int score = ScoreManager.instance.getScore();
         currentScoreText.text = score.ToString();
         updateHighScore();
-    }
-
-    public int getScore()
-    {
-        return score;
     }
 }
