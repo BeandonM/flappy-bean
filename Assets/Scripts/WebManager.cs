@@ -17,6 +17,9 @@ public class WebManager : MonoBehaviour
     private string allTimeUrl = "https://flappy-bean-backend.onrender.com/api/highscores/alltime";
     private string contentType = "application/json";
 
+    [SerializeField] private GameObject submitScoreCanvas;
+    [SerializeField] private GameObject highScoreCanvas;
+
     public void startGame()
     {
         ScoreManager.instance.setScore(0);
@@ -25,7 +28,10 @@ public class WebManager : MonoBehaviour
     }
     public void postPlayerScore()
     {
+        submitScoreCanvas.SetActive(false);
+        highScoreCanvas.SetActive(true);
         StartCoroutine(postScore(url));
+        getDailyScores();
     }
     public void getHighscores()
     {
@@ -82,11 +88,21 @@ public class WebManager : MonoBehaviour
                 };
                 List<HighscoreEntry> entries = JsonConvert.DeserializeObject<List<HighscoreEntry>>(request.downloadHandler.text,settings);
                 HighscoreTable.instance.clearHighscoreTable();
+                int counter = 0;
+                int maxcounter = 30;
                 foreach (HighscoreEntry entry in entries)
                 {
                     if (entry.name != null)
                     {
-                        HighscoreTable.instance.createHighscoreEntryTransform(entry);
+                        if (counter < maxcounter)
+                        {
+                            HighscoreTable.instance.createHighscoreEntryTransform(entry);
+                            counter++;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
 
