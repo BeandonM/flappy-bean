@@ -57,10 +57,12 @@ public class WebManager : MonoBehaviour
             {
 
                 Debug.Log(request.downloadHandler.text);
-                List<TestData> l = JsonConvert.DeserializeObject<List<TestData>>(request.downloadHandler.text);
-                foreach(TestData test in l)
+                List<HighscoreEntry> entries = JsonConvert.DeserializeObject<List<HighscoreEntry>>(request.downloadHandler.text);
+                //List<TestData> l = JsonConvert.DeserializeObject<List<TestData>>(request.downloadHandler.text);
+                foreach(HighscoreEntry entry in entries)
                 {
-                    Debug.Log(test.name);
+                    HighscoreTable.instance.createHighscoreEntryTransform(entry);
+                    //Debug.Log(test.name);
                 }
                 //TestData d = JsonConvert.DeserializeObject<TestData>(request.downloadHandler.text);
                 //TestData d = JS.FromJson<TestData>(request.downloadHandler.text);
