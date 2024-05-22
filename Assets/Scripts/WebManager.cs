@@ -10,6 +10,9 @@ public class WebManager : MonoBehaviour
 {
     // Start is called before the first frame update
     private string url = "https://flappy-bean-backend.onrender.com/api/highscores/addscore";
+    private string dailyUrl = "https://flappy-bean-backend.onrender.com/api/highscores/day";
+    private string monthUrl = "https://flappy-bean-backend.onrender.com/api/highscores/month";
+    private string allTimeUrl = "https://flappy-bean-backend.onrender.com/api/highscores/alltime";
     private string contentType = "application/json";
 
     private void Update()
@@ -27,6 +30,20 @@ public class WebManager : MonoBehaviour
     {
         StartCoroutine(getScore("https://flappy-bean-backend.onrender.com/api/highscores/day"));
     }
+
+    public void getDailyScores()
+    {
+        StartCoroutine(getScore(dailyUrl));
+    }
+    public void getMonthlyScores()
+    {
+        StartCoroutine(getScore(monthUrl));
+    }
+    public void getAllTimeScores()
+    {
+        StartCoroutine(getScore(allTimeUrl));
+    }
+
     public IEnumerator postScore(string url)
     {
         ScoreData scoredata = new ScoreData(HighScoreManager.instance.getName(), ScoreManager.instance.getScore());
@@ -58,26 +75,13 @@ public class WebManager : MonoBehaviour
 
                 Debug.Log(request.downloadHandler.text);
                 List<HighscoreEntry> entries = JsonConvert.DeserializeObject<List<HighscoreEntry>>(request.downloadHandler.text);
-                //List<TestData> l = JsonConvert.DeserializeObject<List<TestData>>(request.downloadHandler.text);
-                foreach(HighscoreEntry entry in entries)
+
+                foreach (HighscoreEntry entry in entries)
                 {
                     HighscoreTable.instance.createHighscoreEntryTransform(entry);
-                    //Debug.Log(test.name);
                 }
-                //TestData d = JsonConvert.DeserializeObject<TestData>(request.downloadHandler.text);
-                //TestData d = JS.FromJson<TestData>(request.downloadHandler.text);
-                //Debug.Log(d.name);
+
             }
         }
     }
-}
-
-
-public class TestData
-{
-    public int id { get; set; }
-    public string name { get; set; }
-    public int score { get; set; }
-    public DateTime score_date { get; set; }
-    public string score_time { get; set; }
 }
