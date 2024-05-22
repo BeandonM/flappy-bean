@@ -26,29 +26,38 @@ public class HighscoreTable : MonoBehaviour
         entryTemplate.gameObject.SetActive(false);
 
         highscoreEntryList = new List<HighscoreEntry>();
-        /*
-        {
-            new HighscoreEntry() {score = 10, name = "Bob"},
-            new HighscoreEntry() {score = 11, name = "Bob"},
-            new HighscoreEntry() {score = 12, name = "Bob"},
-            new HighscoreEntry() {score = 13, name = "Bob"},
-            new HighscoreEntry() {score = 14, name = "Bob"},
-            new HighscoreEntry() {score = 15, name = "Bob"},
-            new HighscoreEntry() {score = 16, name = "Bob"},
-            new HighscoreEntry() {score = 17, name = "Bob"},
-            new HighscoreEntry() {score = 18, name = "Bob"},
-            new HighscoreEntry() {score = 19, name = "Bob"},
-        };
-        */
+
         highscoreEntryTransformList = new List<Transform>();
+        int counter = 0;
+        int maxcounter = 30;
         foreach( HighscoreEntry entry in highscoreEntryList)
         {
-            createHighscoreEntryTransform(entry);
+            if(counter < maxcounter)
+            {
+                createHighscoreEntryTransform(entry);
+                counter++;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    public void clearHighscoreTable()
+    {
+        highscoreEntryList.Clear();
+        highscoreEntryTransformList.Clear();
+        foreach (Transform entryObj in entryContainer)
+        {
+            if (entryObj.GetInstanceID() != entryTemplate.GetInstanceID())
+            {
+                Destroy(entryObj.gameObject);
+            }
         }
     }
     public void createHighscoreEntryTransform(HighscoreEntry highscoreEntry)
     {
-        float templateHeight = 45f;
+        float templateHeight = 37f;
         Transform container = entryContainer;
         List<Transform> transformList = highscoreEntryTransformList;
         Transform entryTransform = Instantiate(entryTemplate, container);

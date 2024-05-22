@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class WebManager : MonoBehaviour
 {
@@ -15,12 +17,11 @@ public class WebManager : MonoBehaviour
     private string allTimeUrl = "https://flappy-bean-backend.onrender.com/api/highscores/alltime";
     private string contentType = "application/json";
 
-    private void Update()
+    public void startGame()
     {
-        if(Input.GetKeyUp(KeyCode.Space))
-        {
-            getHighscores();
-        }
+        ScoreManager.instance.setScore(0);
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        Time.timeScale = 1.0f;
     }
     public void postPlayerScore()
     {
@@ -74,11 +75,19 @@ public class WebManager : MonoBehaviour
             {
 
                 Debug.Log(request.downloadHandler.text);
-                List<HighscoreEntry> entries = JsonConvert.DeserializeObject<List<HighscoreEntry>>(request.downloadHandler.text);
-
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+                List<HighscoreEntry> entries = JsonConvert.DeserializeObject<List<HighscoreEntry>>(request.downloadHandler.text,settings);
+                HighscoreTable.instance.clearHighscoreTable();
                 foreach (HighscoreEntry entry in entries)
                 {
-                    HighscoreTable.instance.createHighscoreEntryTransform(entry);
+                    if (entry.name != null)
+                    {
+                        HighscoreTable.instance.createHighscoreEntryTransform(entry);
+                    }
                 }
 
             }
